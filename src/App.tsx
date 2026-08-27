@@ -29,7 +29,6 @@ export const App: React.FC = () => {
     cigsAvoided,
     hp,
     rank,
-    heatmapStats,
     recordSmoke,
     recordCravingResisted,
     claimQuest,
@@ -88,8 +87,6 @@ export const App: React.FC = () => {
               timeElapsed={timeElapsed}
               hp={hp}
               moneySaved={moneySaved}
-              activityCalendar={state.activityCalendar}
-              heatmapStats={heatmapStats}
               onRecordSmoke={() => setIsRelapseModalOpen(true)}
               onOpenSos={() => {
                 audio.click();

@@ -1,15 +1,11 @@
 import React from 'react';
 import { ITimeElapsed } from '../../models/smoke-log.model.ts';
-import { IActivityDay, IHeatmapStats } from '../../models/heatmap.model.ts';
-import { GithubHeatmap } from '../heatmap/GithubHeatmap.tsx';
 
 interface StatsTabProps {
   todayCount: number;
   timeElapsed: ITimeElapsed;
   hp: number;
   moneySaved: number;
-  activityCalendar: IActivityDay[];
-  heatmapStats: IHeatmapStats;
   onRecordSmoke: () => void;
   onOpenSos: () => void;
 }
@@ -19,8 +15,6 @@ export const StatsTab: React.FC<StatsTabProps> = ({
   timeElapsed,
   hp,
   moneySaved,
-  activityCalendar,
-  heatmapStats,
   onRecordSmoke,
   onOpenSos
 }) => {
