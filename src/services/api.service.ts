@@ -2,7 +2,11 @@ import axios from 'axios';
 import { IAppState } from '../models/app-state.model.ts';
 import { IAppConfig } from '../models/config.model.ts';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api/smoke';
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.PROD
+    ? 'https://photobooth-masonry-be.vercel.app/api/smoke'
+    : 'http://localhost:4000/api/smoke');
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
