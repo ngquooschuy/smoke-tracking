@@ -1,0 +1,178 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-surface: #0c1609;
+  --color-surface-dim: #0c1609;
+  --color-surface-bright: #323c2d;
+  --color-surface-variant: #2d3828;
+  --color-surface-container: #182214;
+  --color-surface-container-high: #222d1e;
+  --color-on-surface: #dae6d0;
+  --color-on-surface-variant: #baccb0;
+  --color-lemon-shock: #CCFF00;
+  --color-primary-container: #39ff14;
+  --color-secondary-container: #fe00fe;
+  --color-secondary: #ffabf3;
+  --color-error: #ffb4ab;
+  --color-pixel-black: #000000;
+}
+
+html, body {
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  font-family: 'JetBrains Mono', monospace;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: contain;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button * {
+  pointer-events: none;
+}
+
+/* Safe Area Insets */
+.safe-top {
+  padding-top: max(12px, env(safe-area-inset-top));
+}
+
+.safe-bottom {
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
+
+/* Quest Status Badges & Buttons */
+.quest-badge {
+  white-space: nowrap !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  min-width: 86px !important;
+  flex-shrink: 0 !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+  padding: 6px 10px !important;
+  line-height: 1.2 !important;
+  box-sizing: border-box !important;
+}
+
+/* Brutal Pixel Hard Shadows */
+.pixel-shadow {
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+}
+
+.pixel-shadow-sm {
+  box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+}
+
+.pixel-shadow-lg {
+  box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+}
+
+.pixel-shadow-neon {
+  box-shadow: 4px 4px 0px 0px rgba(57, 255, 20, 0.4);
+}
+
+.pixel-shadow-lemon {
+  box-shadow: 4px 4px 0px 0px rgba(204, 255, 0, 0.35);
+}
+
+.pixel-shadow-pink {
+  box-shadow: 4px 4px 0px 0px rgba(254, 0, 254, 0.35);
+}
+
+/* Arcade Mechanical Click State */
+.active-press {
+  transition: transform 0.05s ease, box-shadow 0.05s ease;
+  user-select: none;
+}
+
+.active-press:active {
+  transform: translate(4px, 4px) !important;
+  box-shadow: none !important;
+}
+
+.active-press-sm:active {
+  transform: translate(2px, 2px) !important;
+  box-shadow: none !important;
+}
+
+/* CRT Scanline Overlay */
+.scanline {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0) 50%,
+    rgba(0, 0, 0, 0.25) 50%,
+    rgba(0, 0, 0, 0.25)
+  );
+  background-size: 100% 4px;
+}
+
+/* CRT Vignette glow */
+.crt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: radial-gradient(circle at center, transparent 60%, rgba(0, 0, 0, 0.4) 100%);
+  z-index: 99;
+}
+
+/* Custom 8-bit Pixel Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0c1609;
+  border-left: 2px solid #000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #39ff14;
+  border: 2px solid #000;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #CCFF00;
+}
+
+/* Pixel dot background grid */
+.pixel-grid-bg {
+  background-image: radial-gradient(#39ff14 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* SOS Breathing Circle Pulse */
+@keyframes breathe-pulse {
+  0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(57, 255, 20, 0.7); }
+  50% { transform: scale(1.15); box-shadow: 0 0 25px 10px rgba(57, 255, 20, 0.3); }
+  100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(57, 255, 20, 0.7); }
+}
+
+.breathe-animation {
+  animation: breathe-pulse 8s infinite ease-in-out;
+}
+
+/* Sharp 0px Corners Enforcement */
+* {
+  border-radius: 0 !important;
+}
+
+/* Modal Backdrop */
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(2px);
+}

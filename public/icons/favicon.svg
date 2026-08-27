@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" shape-rendering="crispEdges">
+  <rect width="32" height="32" fill="#0c1609"/>
+  <!-- 8-Bit Controller & Heart Logo -->
+  <path d="M6 6h20v20H6z" fill="#182214"/>
+  <path d="M4 10h24v12H4z" fill="#222d1e"/>
+  <!-- D-Pad -->
+  <path d="M7 14h6v4H7z M9 12h2v8H9z" fill="#CCFF00"/>
+  <!-- Heart Core -->
+  <path d="M19 12h2v2h-2z M23 12h2v2h-2z M17 14h8v2h-8z M19 16h6v2h-6z M21 18h2v2h-2z" fill="#fe00fe"/>
+  <!-- Neon Accent Border -->
+  <path d="M2 4h28v2H2z M2 26h28v2H2z M2 4h2v24H2z M28 4h2v24h-2z" fill="#39ff14"/>
+</svg>
