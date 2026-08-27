@@ -3,8 +3,6 @@ import { IActivityDay } from '../models/heatmap.model.ts';
 import { HeatmapLevel } from '../enums/heatmap.enum.ts';
 import { INITIAL_QUESTS } from './quest.constants.ts';
 
-export const APP_STORAGE_KEY = 'SMOKE_QUEST_DATA_V3_REACT_TS';
-
 export function generateInitialActivityCalendar(): IActivityDay[] {
   const today = new Date();
   const dayNames = ['Chủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];

@@ -11,9 +11,9 @@ import { SmokingReason } from '../enums/reason.enum.ts';
 import { HeatmapLevel } from '../enums/heatmap.enum.ts';
 
 export function useQuestStore() {
-  const [state, setState] = useState<IAppState>(() => StorageService.loadState());
+  const [state, setState] = useState<IAppState>(DEFAULT_APP_STATE);
   const [timeElapsed, setTimeElapsed] = useState<ITimeElapsed>(() =>
-    StorageService.getTimeElapsed(state.startTime)
+    StorageService.getTimeElapsed(DEFAULT_APP_STATE.startTime)
   );
 
   // Fetch initial state from MongoDB API via Axios
@@ -30,7 +30,7 @@ export function useQuestStore() {
         }
       })
       .catch((err) => {
-        console.warn('Backend API unavailable, using offline local state:', err.message);
+        console.warn('Backend API error:', err.message);
       });
 
     return () => {
@@ -38,11 +38,10 @@ export function useQuestStore() {
     };
   }, []);
 
-  // Save state to localStorage & sync sound settings on state changes
+  // Sync sound settings when config changes
   useEffect(() => {
-    StorageService.saveState(state);
     audioService.enabled = state.config.soundEnabled;
-  }, [state]);
+  }, [state.config.soundEnabled]);
 
   // Real-time 1s timer loop
   useEffect(() => {
