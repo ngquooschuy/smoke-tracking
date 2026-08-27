@@ -8,9 +8,8 @@ interface NavigationProps {
 
 export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange }) => {
   const tabs = [
-    { id: TabType.QUESTS, label: 'QUESTS', icon: 'sports_esports' },
     { id: TabType.STATS, label: 'STATS', icon: 'bar_chart' },
-    { id: TabType.RANK, label: 'RANK', icon: 'leaderboard' },
+    { id: TabType.TIMELINE, label: 'TIMELINE', icon: 'timeline' },
     { id: TabType.HERO, label: 'HERO', icon: 'person' }
   ];
 

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { IAppState } from '../models/app-state.model.ts';
 import { IAppConfig } from '../models/config.model.ts';
+import { ITimelineResponse } from '../models/timeline.model.ts';
 
 const API_BASE_URL =
   import.meta.env.VITE_API_URL ||
@@ -54,6 +55,14 @@ export class ApiService {
    */
   public static async updateConfig(config: Partial<IAppConfig>): Promise<IAppConfig> {
     const response = await apiClient.put<IAppConfig>('/config', config);
+    return response.data;
+  }
+
+  /**
+   * Lấy danh sách timeline lịch sử sự kiện từ MongoDB
+   */
+  public static async getTimeline(): Promise<ITimelineResponse> {
+    const response = await apiClient.get<ITimelineResponse>('/timeline');
     return response.data;
   }
 

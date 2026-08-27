@@ -7,8 +7,7 @@ import { TopBar } from './components/common/TopBar.tsx';
 import { Navigation } from './components/common/Navigation.tsx';
 import { PwaInstallBanner } from './components/common/PwaInstallBanner.tsx';
 import { StatsTab } from './components/tabs/StatsTab.tsx';
-import { QuestsTab } from './components/tabs/QuestsTab.tsx';
-import { RankTab } from './components/tabs/RankTab.tsx';
+import { TimelineTab } from './components/tabs/TimelineTab.tsx';
 import { HeroTab } from './components/tabs/HeroTab.tsx';
 import { RelapseModal } from './components/modals/RelapseModal.tsx';
 import { SosModal } from './components/modals/SosModal.tsx';
@@ -31,7 +30,6 @@ export const App: React.FC = () => {
     rank,
     recordSmoke,
     recordCravingResisted,
-    claimQuest,
     updateConfig,
     resetAll,
     triggerHaptic
@@ -45,6 +43,8 @@ export const App: React.FC = () => {
     triggerHaptic([10]);
     setActiveTab(tab);
   };
+
+  const totalSmoked = state.relapses ? state.relapses.length : 0;
 
   return (
     <div className="bg-surface text-on-surface font-body-lg min-h-screen relative overflow-x-hidden selection:bg-lemon-shock selection:text-pixel-black scanline">
@@ -95,11 +95,12 @@ export const App: React.FC = () => {
             />
           )}
 
-          {activeTab === TabType.QUESTS && (
-            <QuestsTab quests={state.quests} onClaimQuest={claimQuest} />
+          {activeTab === TabType.TIMELINE && (
+            <TimelineTab
+              relapses={state.relapses}
+              cravingsResisted={state.cravingsResisted}
+            />
           )}
-
-          {activeTab === TabType.RANK && <RankTab rank={rank} />}
 
           {activeTab === TabType.HERO && (
             <HeroTab
@@ -108,7 +109,7 @@ export const App: React.FC = () => {
               moneySaved={moneySaved}
               cigsAvoided={cigsAvoided}
               cravingsResisted={state.cravingsResisted}
-              hp={hp}
+              totalSmoked={totalSmoked}
             />
           )}
         </main>
