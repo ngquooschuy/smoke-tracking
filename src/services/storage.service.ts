@@ -31,11 +31,8 @@ export class StorageService {
   }
 
   public static getLungHealth(state: IAppState): number {
-    const { days } = this.getTimeElapsed(state.startTime);
-    let hp = 40 + days * 7 - (state.todayCount * 15);
-    if (hp > 100) hp = 100;
-    if (hp < 10) hp = 10;
-    return hp;
+    const totalSmoked = state.relapses ? state.relapses.length : 0;
+    return Math.max(0, 100 - totalSmoked * 10);
   }
 
   public static getRank(moneySaved: number): IRankProgress {

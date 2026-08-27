@@ -25,9 +25,9 @@ export const StatsTab: React.FC<StatsTabProps> = ({
   const expPercent = Math.min(100, Math.max(10, Math.round((moneySaved / 200000) * 100)));
   const expDisplay = moneySaved >= 1000 ? `+ ${Math.floor(moneySaved / 1000)}k Đ` : `+ ${moneySaved} Đ`;
 
-  // 5 discrete HP segments
-  const segments = 5;
-  const filledSegments = Math.round((hp / 100) * segments);
+  // 10 discrete HP segments (1 segment = 10% HP)
+  const segments = 10;
+  const filledSegments = Math.ceil(hp / 10);
 
   return (
     <div className="space-y-4">
