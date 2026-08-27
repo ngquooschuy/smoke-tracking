@@ -7,7 +7,7 @@ export const INITIAL_QUESTS: IQuest[] = [
     desc: 'Dập tắt ngọn lửa nicotine tức thì bằng nước tinh khiết.',
     exp: 5000,
     hp: 5,
-    completed: true,
+    completed: false,
     claimed: false,
     icon: 'water_drop'
   },
@@ -17,7 +17,7 @@ export const INITIAL_QUESTS: IQuest[] = [
     desc: 'Hoàn thành 1 lượt hít thở 8-bit để hạ xung thần kinh.',
     exp: 10000,
     hp: 10,
-    completed: true,
+    completed: false,
     claimed: false,
     icon: 'air'
   },
@@ -27,8 +27,8 @@ export const INITIAL_QUESTS: IQuest[] = [
     desc: 'Không chạm 1 điếu thuốc trong 24 giờ liên tiếp.',
     exp: 25000,
     hp: 15,
-    completed: true,
-    claimed: true,
+    completed: false,
+    claimed: false,
     icon: 'verified'
   },
   {
@@ -37,7 +37,7 @@ export const INITIAL_QUESTS: IQuest[] = [
     desc: 'Dành tiền mua trang bị thực tế thay vì đốt khói.',
     exp: 30000,
     hp: 10,
-    completed: true,
+    completed: false,
     claimed: false,
     icon: 'savings'
   },
