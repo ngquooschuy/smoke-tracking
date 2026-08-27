@@ -4,6 +4,7 @@ import { ITimeElapsed } from '../models/smoke-log.model.ts';
 import { IRankProgress } from '../models/hero.model.ts';
 import { IHeatmapStats } from '../models/heatmap.model.ts';
 import { StorageService } from '../services/storage.service.ts';
+import { ApiService } from '../services/api.service.ts';
 import { audioService } from '../services/audio.service.ts';
 import { DEFAULT_APP_STATE, generateInitialActivityCalendar } from '../constants/app.constants.ts';
 import { SmokingReason } from '../enums/reason.enum.ts';
@@ -15,7 +16,29 @@ export function useQuestStore() {
     StorageService.getTimeElapsed(state.startTime)
   );
 
-  // Save state on changes
+  // Fetch initial state from MongoDB API via Axios
+  useEffect(() => {
+    let isMounted = true;
+    ApiService.getState()
+      .then((serverState) => {
+        if (isMounted && serverState) {
+          setState((prev) => ({
+            ...prev,
+            ...serverState,
+            config: { ...prev.config, ...(serverState.config || {}) }
+          }));
+        }
+      })
+      .catch((err) => {
+        console.warn('Backend API unavailable, using offline local state:', err.message);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // Save state to localStorage & sync sound settings on state changes
   useEffect(() => {
     StorageService.saveState(state);
     audioService.enabled = state.config.soundEnabled;
@@ -43,23 +66,19 @@ export function useQuestStore() {
     audioService.hit();
     triggerHaptic([40, 80, 40]);
 
+    // Optimistic UI update
     setState((prev) => {
       const newTodayCount = prev.todayCount + 1;
       const todayDateStr = new Date().toISOString().split('T')[0];
 
-      // Update activity calendar for today
-      const updatedCalendar = prev.activityCalendar.map((day) => {
+      const updatedCalendar = (prev.activityCalendar || []).map((day) => {
         if (day.date === todayDateStr || day.isToday) {
           let lvl = HeatmapLevel.CLEAN;
           if (newTodayCount === 1) lvl = HeatmapLevel.LIGHT;
           else if (newTodayCount <= 3) lvl = HeatmapLevel.MODERATE;
           else lvl = HeatmapLevel.HEAVY;
 
-          return {
-            ...day,
-            count: newTodayCount,
-            level: lvl
-          };
+          return { ...day, count: newTodayCount, level: lvl };
         }
         return day;
       });
@@ -79,6 +98,13 @@ export function useQuestStore() {
         ]
       };
     });
+
+    // Sync with MongoDB API
+    ApiService.recordSmoke(reason)
+      .then((serverState) => {
+        if (serverState) setState(serverState);
+      })
+      .catch((err) => console.warn('Sync recordSmoke to API failed:', err.message));
   }, [triggerHaptic]);
 
   // Craving Resisted (SOS mode complete)
@@ -86,8 +112,11 @@ export function useQuestStore() {
     audioService.levelUp();
     triggerHaptic([30, 60, 90]);
 
+    // Optimistic UI update
     setState((prev) => {
-      const updatedQuests = prev.quests.map((q) => (q.id === 'q2' ? { ...q, completed: true } : q));
+      const updatedQuests = (prev.quests || []).map((q) =>
+        q.id === 'q2' ? { ...q, completed: true } : q
+      );
       return {
         ...prev,
         cravingsResisted: prev.cravingsResisted + 1,
@@ -95,6 +124,13 @@ export function useQuestStore() {
         quests: updatedQuests
       };
     });
+
+    // Sync with MongoDB API
+    ApiService.recordCravingResisted()
+      .then((serverState) => {
+        if (serverState) setState(serverState);
+      })
+      .catch((err) => console.warn('Sync recordCravingResisted to API failed:', err.message));
   }, [triggerHaptic]);
 
   // Claim Quest reward
@@ -102,25 +138,40 @@ export function useQuestStore() {
     audioService.coin();
     triggerHaptic([20, 50, 20]);
 
+    // Optimistic UI update
     setState((prev) => {
-      const targetQuest = prev.quests.find((q) => q.id === questId);
+      const targetQuest = (prev.quests || []).find((q) => q.id === questId);
       if (!targetQuest || !targetQuest.completed || targetQuest.claimed) return prev;
 
-      const updatedQuests = prev.quests.map((q) => (q.id === questId ? { ...q, claimed: true } : q));
+      const updatedQuests = (prev.quests || []).map((q) =>
+        q.id === questId ? { ...q, claimed: true } : q
+      );
       return {
         ...prev,
         expBonus: prev.expBonus + targetQuest.exp,
         quests: updatedQuests
       };
     });
+
+    // Sync with MongoDB API
+    ApiService.claimQuest(questId)
+      .then((serverState) => {
+        if (serverState) setState(serverState);
+      })
+      .catch((err) => console.warn('Sync claimQuest to API failed:', err.message));
   }, [triggerHaptic]);
 
   // Update Config
   const updateConfig = useCallback((newConfig: Partial<IAppState['config']>) => {
+    // Optimistic UI update
     setState((prev) => ({
       ...prev,
       config: { ...prev.config, ...newConfig }
     }));
+
+    // Sync with MongoDB API
+    ApiService.updateConfig(newConfig)
+      .catch((err) => console.warn('Sync updateConfig to API failed:', err.message));
   }, []);
 
   // Reset all data
@@ -134,6 +185,13 @@ export function useQuestStore() {
       activityCalendar: generateInitialActivityCalendar()
     };
     setState(fresh);
+
+    // Sync with MongoDB API
+    ApiService.resetState()
+      .then((serverState) => {
+        if (serverState) setState(serverState);
+      })
+      .catch((err) => console.warn('Sync resetState to API failed:', err.message));
   }, []);
 
   // Calculated properties
